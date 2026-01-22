@@ -139,6 +139,14 @@ loadImagesBtn.addEventListener("click", function (e) {
 
         console.log("ID messo nella card:", photo.id); // Esercizio 5
 
+        // salvo info utili nella card per il modal
+        card.dataset.large = photo.src.large2x || photo.src.large || photo.src.medium;
+        card.dataset.photographer = photo.photographer;
+        card.dataset.photographerUrl = photo.photographer_url;
+        card.dataset.alt = photo.alt || "";
+        card.dataset.id = photo.id;
+        card.dataset.pexelsUrl = photo.url;
+
         // ESERCIZIO 7: click su immagine o titolo → pagina dettagli
         img.style.cursor = "pointer";
         title.style.cursor = "pointer";
@@ -203,6 +211,14 @@ loadSecondaryBtn.addEventListener("click", function (e) {
 
         console.log("ID messo nella card:", photo.id); // Esercizio 5
 
+        // salvo info utili nella card per il modal
+        card.dataset.large = photo.src.large2x || photo.src.large || photo.src.medium;
+        card.dataset.photographer = photo.photographer;
+        card.dataset.photographerUrl = photo.photographer_url;
+        card.dataset.alt = photo.alt || "";
+        card.dataset.id = photo.id;
+        card.dataset.pexelsUrl = photo.url;
+
         // ESERCIZIO 7: click su immagine o titolo → pagina dettagli
         img.style.cursor = "pointer";
         title.style.cursor = "pointer";
@@ -237,4 +253,113 @@ hideButtons.forEach((btn) => {
       console.log("Card nascosta!");
     }
   });
+});
+
+// ESERCIZIO 9: clic su VIEW → apre immagine in MODAL
+
+// creo il modal una sola volta e lo aggiungo al body
+const modalContainer = document.createElement("div");
+modalContainer.innerHTML = `
+  <div class="modal fade" id="pexelsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content bg-dark text-white border-0">
+
+        <div class="modal-header border-0">
+          <h5 class="modal-title">Preview</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center">
+          <div id="modalLoader" class="spinner-border text-light my-4" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+
+          <img id="pexelsModalImg" src="" class="img-fluid rounded" alt="preview" style="display:none; max-height:75vh; object-fit:contain; cursor:zoom-in;">
+          
+          <div class="mt-3 text-start">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <strong id="modalPhotographerName"></strong>
+                <a id="modalPhotographerLink" href="#" target="_blank" class="ms-2 text-info">Profilo</a>
+              </div>
+              <small class="text-secondary">ID: <span id="modalPhotoId"></span></small>
+            </div>
+
+            <p id="modalAlt" class="mt-2 text-secondary mb-2"></p>
+
+            <a id="modalPexelsLink" class="btn btn-outline-light btn-sm" href="#" target="_blank">
+              Apri su Pexels
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+`;
+document.body.appendChild(modalContainer);
+
+const pexelsModalEl = document.getElementById("pexelsModal");
+const pexelsModal = new bootstrap.Modal(pexelsModalEl);
+
+const modalImg = document.getElementById("pexelsModalImg");
+const modalLoader = document.getElementById("modalLoader");
+const modalPhotographerName = document.getElementById("modalPhotographerName");
+const modalPhotographerLink = document.getElementById("modalPhotographerLink");
+const modalAlt = document.getElementById("modalAlt");
+const modalPhotoId = document.getElementById("modalPhotoId");
+const modalPexelsLink = document.getElementById("modalPexelsLink");
+
+// zoom toggle
+modalImg.addEventListener("click", function () {
+  if (modalImg.style.transform === "scale(1.8)") {
+    modalImg.style.transform = "scale(1)";
+    modalImg.style.cursor = "zoom-in";
+  } else {
+    modalImg.style.transform = "scale(1.8)";
+    modalImg.style.cursor = "zoom-out";
+  }
+});
+
+// Ascolta TUTTI i click che succedono nella pagina
+document.addEventListener("click", function (e) {
+  const btn = e.target;
+
+  if (btn.tagName === "BUTTON" && btn.innerText.trim() === "View") {
+    const card = btn.closest(".card");
+    if (!card) return;
+
+    // reset zoom
+    modalImg.style.transform = "scale(1)";
+    modalImg.style.cursor = "zoom-in";
+
+    // spinner ON
+    modalLoader.style.display = "inline-block";
+    modalImg.style.display = "none";
+
+    // prendo dati dalla card
+    const bigSrc = card.dataset.large;
+    const photographer = card.dataset.photographer;
+    const photographerUrl = card.dataset.photographerUrl;
+    const alt = card.dataset.alt;
+    const id = card.dataset.id;
+    const pexelsUrl = card.dataset.pexelsUrl;
+
+    // set info
+    modalPhotographerName.innerText = photographer || "Unknown";
+    modalPhotographerLink.href = photographerUrl || "#";
+    modalAlt.innerText = alt || "";
+    modalPhotoId.innerText = id || "";
+    modalPexelsLink.href = pexelsUrl || "#";
+
+    // carico immagine grande
+    modalImg.onload = function () {
+      modalLoader.style.display = "none";
+      modalImg.style.display = "block";
+    };
+
+    modalImg.src = bigSrc;
+
+    pexelsModal.show();
+  }
 });

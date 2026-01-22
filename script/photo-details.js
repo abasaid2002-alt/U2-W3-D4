@@ -35,6 +35,17 @@ if (!photoId) {
     .then((photo) => {
       console.log("Dettagli foto:", photo);
 
+      console.log("avg_color =", photo.avg_color);
+
+      // ESERCIZIO 8: cambio background con il colore medio della foto
+      document.body.classList.remove("bg-light");
+
+      document.documentElement.style.backgroundColor = photo.avg_color;
+      document.body.style.backgroundColor = photo.avg_color;
+
+      document.body.style.minHeight = "100vh";
+      document.body.style.transition = "0.4s";
+
       photoContainer.innerHTML = `
         <div class="card shadow-sm mx-auto" style="max-width: 900px;">
           <img src="${photo.src.large}" class="card-img-top" alt="${photo.alt || "Pexels photo"}">
