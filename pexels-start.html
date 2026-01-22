@@ -12,16 +12,50 @@
       crossorigin="anonymous"
     />
     <style>
+      /* Fa sì che ogni colonna della griglia si comporti come un contenitore flex
+   (utile per rendere le card tutte della stessa altezza) */
+      .album .col-md-4 {
+        display: flex;
+      }
+
+      /* La card occupa tutta la larghezza e altezza disponibile dentro la colonna */
+      .album .col-md-4 .card {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Organizza i contenuti della card in colonna (titolo, testo, bottoni...) */
+      .album .card-body {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Spinge l’ultima riga (quella con bottoni + ID) sempre in basso nella card
+   così i bottoni rimangono allineati */
+      .album .card-body > .d-flex {
+        margin-top: auto;
+      }
+
+      /* Imposta lo stesso spazio (gap) tra colonne e righe della griglia */
+      .album .row {
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 1.5rem;
+      }
+
+      /* Rende lo sfondo del modal più scuro e con effetto blur (più “cinema”) */
       .modal-backdrop.show {
         opacity: 0.85;
         backdrop-filter: blur(6px);
       }
 
+      /* Imposta altezza fissa alle immagini delle card e le taglia bene (cover)
+   così tutte le immagini risultano uguali come dimensione */
       .card-img-top {
         height: 200px;
         object-fit: cover;
       }
 
+      /* Stile della sezione header (jumbotron) */
       .jumbotron {
         padding-top: 3rem;
         padding-bottom: 3rem;
@@ -29,6 +63,7 @@
         background-color: #fff;
       }
 
+      /* Aumenta il padding del jumbotron su schermi più grandi */
       @media (min-width: 768px) {
         .jumbotron {
           padding-top: 6rem;
@@ -36,32 +71,39 @@
         }
       }
 
+      /* Rimuove lo spazio sotto l’ultimo paragrafo del jumbotron */
       .jumbotron p:last-child {
         margin-bottom: 0;
       }
 
+      /* Rende il titolo del jumbotron più leggero */
       .jumbotron-heading {
         font-weight: 300;
       }
 
+      /* Limita la larghezza massima del contenuto del jumbotron */
       .jumbotron .container {
         max-width: 40rem;
       }
 
+      /* Padding del footer */
       footer {
         padding-top: 3rem;
         padding-bottom: 3rem;
       }
 
+      /* Riduce lo spazio tra i paragrafi del footer */
       footer p {
         margin-bottom: 0.25rem;
       }
 
+      /* Aumenta il padding a destra e sinistra nella navbar */
       .navbar .container-fluid {
         padding-left: 8em;
         padding-right: 8em;
       }
 
+      /* Stile delle immagini placeholder (Bootstrap) */
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -71,6 +113,7 @@
         user-select: none;
       }
 
+      /* Placeholder più grande su schermi grandi */
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;

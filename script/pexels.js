@@ -170,7 +170,7 @@ loadImagesBtn.addEventListener("click", function (e) {
 loadSecondaryBtn.addEventListener("click", function (e) {
   e.preventDefault();
 
-  const pexelsURL = "https://api.pexels.com/v1/search?query=tigers&per_page=9";
+  const pexelsURL = "https://api.pexels.com/v1/search?query=sea&per_page=9";
 
   console.log("Sto chiamando:", pexelsURL);
 
@@ -269,14 +269,14 @@ modalContainer.innerHTML = `
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
-        <div class="modal-body text-center">
+        <div class="modal-body d-flex flex-column align-items-center">
           <div id="modalLoader" class="spinner-border text-light my-4" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
 
           <img id="pexelsModalImg" src="" class="img-fluid rounded" alt="preview" style="display:none; max-height:75vh; object-fit:contain; cursor:zoom-in;">
           
-          <div class="mt-3 text-start">
+          <div class="mt-3 w-100 text-start">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <strong id="modalPhotographerName"></strong>
@@ -338,7 +338,7 @@ document.addEventListener("click", function (e) {
     modalImg.style.display = "none";
 
     // prendo dati dalla card
-    const bigSrc = card.dataset.large;
+    const bigSrc = card.dataset.large || card.querySelector("img").src;
     const photographer = card.dataset.photographer;
     const photographerUrl = card.dataset.photographerUrl;
     const alt = card.dataset.alt;
